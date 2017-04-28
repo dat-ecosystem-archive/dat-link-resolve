@@ -1,0 +1,32 @@
+{
+  "name": "dat-link-resolve",
+  "description": "resolve urls, links to a dat key",
+  "version": "1.0.0",
+  "author": "Joe Hand <joe@hand.email>",
+  "bugs": {
+    "url": "https://github.com/joehand/dat-link-resolve/issues"
+  },
+  "devDependencies": {
+    "standard": "*",
+    "tap-spec": "^4.0.2",
+    "tape": "^4.0.0"
+  },
+  "homepage": "https://github.com/joehand/dat-link-resolve",
+  "keywords": [
+    "dat"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joehand/dat-link-resolve.git"
+  },
+  "scripts": {
+    "test": "standard && tape test/*.js | tap-spec"
+  },
+  "dependencies": {
+    "dat-encoding": "^4.0.2",
+    "debug": "^2.6.6",
+    "nets": "^3.2.0"
+  }
+}
