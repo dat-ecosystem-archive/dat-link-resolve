@@ -13,6 +13,21 @@ var stringKeys = [
   {type: 'valid', key: 'host.com/whatever/6161616161616161616161616161616161616161616161616161616161616161'}
 ]
 
+var stringBadKeys = [
+  {type: 'invalid', key: '616161616161616161616161616161616161616161616161616161616161616'},
+  {type: 'invalid', key: '61616161616161616161616161616161616161616161616161616161616161612'}
+]
+
+test('resolve bad key without http', function (t) {
+  t.plan(2 * stringBadKeys.length) // 2 tests for 2 keys
+  stringBadKeys.forEach(function (key) {
+    datResolve(key.key, function (err, newKey) {
+      t.ok(err, 'expected error')
+      t.notOk(newKey, 'not a key')
+    })
+  })
+})
+
 test('resolve key without http', function (t) {
   t.plan(3 * 7) // 3 tests for 7 keys
   stringKeys.forEach(function (key) {
