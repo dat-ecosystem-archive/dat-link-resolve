@@ -18,6 +18,44 @@ var stringBadKeys = [
   {type: 'invalid', key: '61616161616161616161616161616161616161616161616161616161616161612'}
 ]
 
+test('resolve key with path', function (t) {
+  t.plan(2)
+  datResolve('87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336/path', function (err, newKey) {
+    console.log('KEYPATH', err, newKey)
+    t.notOk(err, 'not expected error')
+    t.ok(newKey, 'is a key')
+  })
+})
+
+/*
+test('resolve hostname with path', function (t) {
+  t.plan(2)
+  datResolve('beakerbrowser.com/path', function (err, newKey) {
+    console.log('HOSTNAMEPATH', err, newKey)
+    t.notOk(err, 'not expected error')
+    t.ok(newKey, 'is a key')
+  })
+})
+*/
+
+test('resolve key with version', function (t) {
+  t.plan(2)
+  datResolve('87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336+5', function (err, newKey) {
+    console.log('KEYVERSION', err, newKey)
+    t.notOk(err, 'not expected error')
+    t.ok(newKey, 'is a key')
+  })
+})
+
+test('resolve hostname with version', function (t) {
+  t.plan(2)
+  datResolve('beakerbrowser.com+5', function (err, newKey) {
+    console.log('HOSTNAMEVERSION', err, newKey)
+    t.notOk(err, 'not expected error')
+    t.ok(newKey, 'is a key')
+  })
+})
+
 test('resolve bad key without http', function (t) {
   t.plan(2 * stringBadKeys.length) // 2 tests for 2 keys
   stringBadKeys.forEach(function (key) {
