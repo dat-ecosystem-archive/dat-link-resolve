@@ -1,5 +1,4 @@
 var assert = require('assert')
-var url = require('url')
 var stringKey = require('dat-encoding').toStr
 var nets = require('nets')
 var datDns = require('dat-dns')()
@@ -19,46 +18,45 @@ function resolve (link, cb) {
     key = stringKey(link)
     cb(null, key)
   } catch (e) {
-    return lookup()
+    lookup()
   }
 
   function lookup () {
-    debug('lookup', link)
-    var parsed = url.parse(link)
+    // if it starts with http or dat: use as is, otherwise prepend http://
+    var urlLink = (link.indexOf('http') && link.indexOf('dat:')) ? ('http://' + link) : link
 
-    // parsed.host check b/c url.parse('beakerbrowser.com') returns parsed.pathname = 'beakerbrowser.com'
-    if (parsed.host && parsed.path && parsed.path !== '/') return resolveKey()
-
-    // If no path, check .well-known first
-    datDns.resolveName(link, function (err, key) {
-      if (key) return cb(null, key)
-      if (err) debug('datDns.resolveName() error', err)
-      resolveKey()
-    })
-
-    function resolveKey () {
-      var urlLink = link.indexOf('http') > -1 ? link : 'http://' + link
-      nets({ url: urlLink, json: true }, function (err, resp, body) {
-        if (err) return cb(err)
-        if (resp.statusCode !== 200) return cb(body.message)
-
-        // first check if key is in header response
-        key = resp.headers['hyperdrive-key'] || resp.headers['dat-key']
-        if (key) {
-          debug('Received key from http header:', key)
-          return cb(null, key)
-        }
-
-        // else fall back to parsing the body
-        try {
-          key = stringKey(body.url)
-          debug('Received key via json:', key)
-          if (key) return cb(null, key)
-        } catch (e) {
-          cb(new Error(e))
-        }
-        cb(new Error('Unable to lookup key from http link.'))
+    function resolveName () {
+      datDns.resolveName(urlLink, function (err, key) {
+        debug('resolveName', urlLink, err, key)
+        if (key) return cb(null, key)
+        if (err) debug('datDns.resolveName() error')
+        cb(err)
       })
     }
+
+    debug('resolveKey', link, urlLink)
+    nets({ url: urlLink, json: true }, function (err, resp, body) {
+      // no ressource at given URL
+      if (err || resp.statusCode !== 200) {
+        return resolveName()
+      }
+
+      // first check if key is in header response
+      key = resp.headers['hyperdrive-key'] || resp.headers['dat-key']
+      if (key) {
+        debug('Received key from http header:', key)
+        return cb(null, key)
+      }
+
+      // else fall back to parsing the body
+      try {
+        key = stringKey(body.url)
+        debug('Received key via json:', key, typeof body, body && typeof body.url)
+        if (key) return cb(null, key)
+      } catch (e) {
+        // fall back to datDns
+        resolveName()
+      }
+    })
   }
 }
