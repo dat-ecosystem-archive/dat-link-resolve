@@ -6,8 +6,15 @@ var debug = require('debug')('dat-link-resolve')
 
 module.exports = resolve
 
-function resolve (link, cb) {
+function resolve (link, options, cb) {
   assert.ok(link, 'dat-link-resolve: link required')
+  if (!cb && options) {
+    cb = options
+    options = {}
+  } else if (typeof options === 'boolean') {
+    options = { verbose: options }
+  }
+  assert.equal(typeof options, 'object', 'dat-link-resolve: options must be an object')
   assert.equal(typeof cb, 'function', 'dat-link-resolve: callback required')
 
   var key = null
@@ -16,7 +23,11 @@ function resolve (link, cb) {
     // validates + removes dat://
     // also works for http urls with keys in them
     key = stringKey(link)
-    cb(null, key)
+    if (options.verbose) {
+      cb(null, { key })
+    } else {
+      cb(null, key)
+    }
   } catch (e) {
     lookup()
   }
@@ -28,7 +39,14 @@ function resolve (link, cb) {
     function resolveName () {
       datDns.resolveName(urlLink, function (err, key) {
         debug('resolveName', urlLink, err, key)
-        if (key) return cb(null, key)
+        if (key) {
+          if (options.verbose) {
+            cb(null, { key })
+          } else {
+            cb(null, key)
+          }
+          return
+        }
         if (err) debug('datDns.resolveName() error')
         cb(err)
       })
@@ -45,14 +63,26 @@ function resolve (link, cb) {
       key = resp.headers['hyperdrive-key'] || resp.headers['dat-key']
       if (key) {
         debug('Received key from http header:', key)
-        return cb(null, key)
+        if (options.verbose) {
+          cb(null, { key })
+        } else {
+          cb(null, key)
+        }
+        return
       }
 
       // else fall back to parsing the body
       try {
         key = stringKey(body.url)
         debug('Received key via json:', key, typeof body, body && typeof body.url)
-        if (key) return cb(null, key)
+        if (key) {
+          if (options.verbose) {
+            cb(null, { key })
+          } else {
+            cb(null, key)
+          }
+          return
+        }
       } catch (e) {
         // fall back to datDns
         resolveName()
