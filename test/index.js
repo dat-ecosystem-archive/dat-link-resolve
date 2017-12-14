@@ -118,3 +118,35 @@ test('resolve beaker browser dat', function (t) {
     t.end()
   })
 })
+
+test('resolve beaker browser dat v2', function (t) {
+  datResolve('dat://beakerbrowser.com', true, function (err, response) {
+    t.error(err, 'no error')
+    t.ok(response && response.key, 'got key')
+    t.end()
+  })
+})
+
+test('resolve beaker browser dat v3', function (t) {
+  datResolve('dat://beakerbrowser.com', false, function (err, key) {
+    t.error(err, 'no error')
+    t.ok(key, 'got key')
+    t.end()
+  })
+})
+
+test('resolve beaker browser dat v4', function (t) {
+  datResolve('dat://beakerbrowser.com', { verbose: true }, function (err, response) {
+    t.error(err, 'no error')
+    t.ok(response && response.key, 'got key')
+    t.end()
+  })
+})
+
+test('resolve beaker browser dat v5', function (t) {
+  datResolve('dat://beakerbrowser.com', {}, function (err, key) {
+    t.error(err, 'no error')
+    t.ok(key, 'got key')
+    t.end()
+  })
+})
