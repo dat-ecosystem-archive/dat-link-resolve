@@ -150,3 +150,11 @@ test('resolve beaker browser dat v5', function (t) {
     t.end()
   })
 })
+
+test('resolve key with path (verbose)', function (t) {
+  t.plan(2)
+  datResolve('87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336/path', true, function (err, response) {
+    t.notOk(err, 'not expected error')
+    t.ok(response && response.key, 'is a key')
+  })
+})

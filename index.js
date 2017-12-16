@@ -18,13 +18,16 @@ function resolve (link, options, cb) {
   assert.equal(typeof cb, 'function', 'dat-link-resolve: callback required')
 
   var key = null
+  var response = { link }
 
   try {
     // validates + removes dat://
     // also works for http urls with keys in them
     key = stringKey(link)
     if (options.verbose) {
-      cb(null, { key })
+      response.key = key
+      debug('stringKey response', response)
+      cb(null, response)
     } else {
       cb(null, key)
     }
@@ -41,7 +44,8 @@ function resolve (link, options, cb) {
         debug('resolveName', urlLink, err, key)
         if (key) {
           if (options.verbose) {
-            cb(null, { key })
+            response.key = key
+            cb(null, response)
           } else {
             cb(null, key)
           }
@@ -64,7 +68,8 @@ function resolve (link, options, cb) {
       if (key) {
         debug('Received key from http header:', key)
         if (options.verbose) {
-          cb(null, { key })
+          response.key = key
+          cb(null, response)
         } else {
           cb(null, key)
         }
@@ -77,7 +82,8 @@ function resolve (link, options, cb) {
         debug('Received key via json:', key, typeof body, body && typeof body.url)
         if (key) {
           if (options.verbose) {
-            cb(null, { key })
+            response.key = key
+            cb(null, response)
           } else {
             cb(null, key)
           }
