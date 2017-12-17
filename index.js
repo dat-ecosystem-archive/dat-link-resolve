@@ -6,6 +6,16 @@ var debug = require('debug')('dat-link-resolve')
 
 module.exports = resolve
 
+function parseUrl (key, link, named) {
+  var response = { key: key, link: link }
+  var matches = link.match(new RegExp((named ? '' : key) + '(\\+[0-9]+)?(/.*)?$'))
+  if (matches) {
+    if (matches[1]) { response.version = parseInt(matches[1], 10) }
+    if (matches[2]) { response.path = matches[2] }
+  }
+  return response
+}
+
 function resolve (link, options, cb) {
   assert.ok(link, 'dat-link-resolve: link required')
   if (!cb && options) {
@@ -18,16 +28,13 @@ function resolve (link, options, cb) {
   assert.equal(typeof cb, 'function', 'dat-link-resolve: callback required')
 
   var key = null
-  var response = { link }
 
   try {
     // validates + removes dat://
     // also works for http urls with keys in them
     key = stringKey(link)
     if (options.verbose) {
-      response.key = key
-      debug('stringKey response', response)
-      cb(null, response)
+      cb(null, parseUrl(key, link))
     } else {
       cb(null, key)
     }
@@ -44,14 +51,13 @@ function resolve (link, options, cb) {
         debug('resolveName', urlLink, err, key)
         if (key) {
           if (options.verbose) {
-            response.key = key
-            cb(null, response)
+            cb(null, parseUrl(key, link, true))
           } else {
             cb(null, key)
           }
           return
         }
-        if (err) debug('datDns.resolveName() error')
+        debug('datDns.resolveName() error', err)
         cb(err)
       })
     }
@@ -68,8 +74,7 @@ function resolve (link, options, cb) {
       if (key) {
         debug('Received key from http header:', key)
         if (options.verbose) {
-          response.key = key
-          cb(null, response)
+          cb(null, { key: key })
         } else {
           cb(null, key)
         }
@@ -82,8 +87,7 @@ function resolve (link, options, cb) {
         debug('Received key via json:', key, typeof body, body && typeof body.url)
         if (key) {
           if (options.verbose) {
-            response.key = key
-            cb(null, response)
+            cb(null, { key: key })
           } else {
             cb(null, key)
           }
