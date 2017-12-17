@@ -36,7 +36,28 @@ datResolve(link, function (err, key) {
 
 Link can be string or buffer.
 
-Resolution order:
+
+### `datResolve(link, options, callback(err, { key, version, path }))`
+
+Link can be string or buffer.
+
+Options an object that supports the ```verbose``` key. If ```true```, the
+callback is called with an object. You can also directly set ```options```
+to ```true``` for the same effect. Otherwise, the callback is called with ```keys```
+as usual.
+
+For example:
+
+```js
+// same as datResolve('beakerbrowser.com+54/path', { verbose: true }, ...)
+datResolve('beakerbrowser.com+54/path', true, function (err, response) {
+  // response.key = 87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336
+  // response.version = 54 (as an integer)
+  // response.path = /path
+})
+```
+
+## Resolution order:
 
 1. Validate buffers or any strings with 64 character hashes in them via [dat-encoding](https://github.com/juliangruber/dat-encoding)
 2. Check headers in http request
