@@ -12,7 +12,7 @@ resolve urls, links to a dat key using common methods
 * URLs with keys in them (`datproject.org/6161616161616161616161616161616161616161616161616161616161616161`)
 * `hyperdrive-key` or `dat-key` headers
 * Url to JSON http request that returns `{key: <dat-key>}`
-* Dat-DNS resolution ([details](https://github.com/beakerbrowser/beaker/wiki/Authenticated-Dat-URLs-and-HTTPS-to-Dat-Discovery))
+* Dat-DNS resolution (via [dat-dns](https://github.com/datprotocol/dat-dns))
 
 ## Install
 
