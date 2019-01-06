@@ -4,14 +4,13 @@
   "version": "2.2.0",
   "author": "Joe Hand <joe@hand.email>",
   "bugs": {
-    "url": "https://github.com/joehand/dat-link-resolve/issues"
+    "url": "https://github.com/datproject/dat-link-resolve/issues"
   },
   "devDependencies": {
-    "standard": "*",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.9.1"
+    "standard": "^12.0.1",
+    "tape": "^4.9.2"
   },
-  "homepage": "https://github.com/joehand/dat-link-resolve",
+  "homepage": "https://github.com/datproject/dat-link-resolve",
   "keywords": [
     "dat"
   ],
@@ -19,15 +18,15 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joehand/dat-link-resolve.git"
+    "url": "https://github.com/datproject/dat-link-resolve.git"
   },
   "scripts": {
-    "test": "standard && tape test/*.js | tap-spec"
+    "test": "standard && tape test/*.js"
   },
   "dependencies": {
-    "dat-dns": "^3.0.1",
+    "dat-dns": "^3.0.2",
     "dat-encoding": "^5.0.1",
-    "debug": "^3.1.0",
-    "nets": "^3.2.0"
+    "debug": "^4.1.1",
+    "simple-get": "^3.0.3"
   }
 }
