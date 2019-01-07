@@ -1,7 +1,7 @@
 {
   "name": "dat-link-resolve",
   "description": "resolve urls, links to a dat key",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "author": "Joe Hand <joe@hand.email>",
   "bugs": {
     "url": "https://github.com/datproject/dat-link-resolve/issues"
