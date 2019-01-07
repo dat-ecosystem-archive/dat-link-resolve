@@ -1,6 +1,6 @@
 var assert = require('assert')
 var stringKey = require('dat-encoding').toStr
-var nets = require('nets')
+var get = require('simple-get')
 var datDns = require('dat-dns')()
 var debug = require('debug')('dat-link-resolve')
 
@@ -8,7 +8,7 @@ module.exports = resolve
 
 function resolve (link, cb) {
   assert.ok(link, 'dat-link-resolve: link required')
-  assert.equal(typeof cb, 'function', 'dat-link-resolve: callback required')
+  assert.strictEqual(typeof cb, 'function', 'dat-link-resolve: callback required')
 
   var key = null
 
@@ -36,7 +36,11 @@ function resolve (link, cb) {
     }
 
     debug('resolveKey', link, urlLink)
-    nets({ url: urlLink, json: true }, function (err, resp, body) {
+    get({
+      url: urlLink.replace('dat://', 'http://'),
+      json: true,
+      timeout: 1500
+    }, function (err, resp, body) {
       // no ressource at given URL
       if (err || resp.statusCode !== 200) {
         return resolveName()
