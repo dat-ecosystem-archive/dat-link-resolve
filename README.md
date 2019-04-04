@@ -6,6 +6,8 @@ resolve urls, links to a dat key using common methods
 [![travis][travis-image]][travis-url]
 [![standard][standard-image]][standard-url]
 
+This module combines [dat-dns](https://github.com/datprotocol/dat-dns) and [parse-dat-url](https://github.com/pfrazee/parse-dat-url) for basic uses. If you need more control over dns resolution, we recommend using those directly.
+
 ### Supports
 
 * Common dat key representations (`dat://`, etc.)
