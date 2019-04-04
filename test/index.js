@@ -18,113 +18,130 @@ var stringBadKeys = [
   { type: 'invalid', key: '61616161616161616161616161616161616161616161616161616161616161612' }
 ]
 
-test('resolve key with path', function (t) {
-  t.plan(2)
-  datResolve('87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336/path', function (err, newKey) {
-    t.notOk(err, 'not expected error')
+test('resolve key with path', async function (t) {
+  try {
+    const newKey = await datResolve('87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336/path')
     t.ok(newKey, 'is a key')
-  })
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve https hostname with path', function (t) {
-  t.plan(2)
-  datResolve('https://beakerbrowser.com/path', function (err, newKey) {
-    t.notOk(err, 'not expected error')
+test('resolve https hostname with path', async function (t) {
+  try {
+    const newKey = await datResolve('https://beakerbrowser.com/path')
     t.ok(newKey, 'is a key')
-  })
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve dat hostname with path', function (t) {
-  t.plan(2)
-  datResolve('dat://beakerbrowser.com/path', function (err, newKey) {
-    t.notOk(err, 'not expected error')
+test('resolve dat hostname with path', async function (t) {
+  try {
+    const newKey = await datResolve('dat://beakerbrowser.com/path')
     t.ok(newKey, 'is a key')
-  })
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve hostname with path', function (t) {
-  t.plan(2)
-  datResolve('beakerbrowser.com/path', function (err, newKey) {
-    t.notOk(err, 'not expected error')
+test('resolve hostname with path', async function (t) {
+  try {
+    const newKey = await datResolve('beakerbrowser.com/path')
     t.ok(newKey, 'is a key')
-  })
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve key with version', function (t) {
-  t.plan(2)
-  datResolve('87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336+5', function (err, newKey) {
-    t.notOk(err, 'not expected error')
+test('resolve key with version', async function (t) {
+  try {
+    const newKey = await datResolve('87ed2e3b160f261a032af03921a3bd09227d0a4cde73466c17114816cae43336+5')
     t.ok(newKey, 'is a key')
-  })
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve hostname with version', function (t) {
-  t.plan(2)
-  datResolve('beakerbrowser.com+5', function (err, newKey) {
-    t.notOk(err, 'not expected error')
+test('resolve hostname with version', async function (t) {
+  try {
+    const newKey = await datResolve('beakerbrowser.com+5')
     t.ok(newKey, 'is a key')
-  })
-})
-
-test('resolve bad key without http', function (t) {
-  t.plan(2 * stringBadKeys.length) // 2 tests for 2 keys
-  stringBadKeys.forEach(function (key) {
-    datResolve(key.key, function (err, newKey) {
-      t.ok(err, 'expected error')
-      t.notOk(newKey, 'not a key')
-    })
-  })
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
 test('resolve key without http', function (t) {
-  t.plan(3 * 7) // 3 tests for 7 keys
-  stringKeys.forEach(function (key) {
-    datResolve(key.key, function (err, newKey) {
-      t.error(err, 'no error')
+  t.plan(2 * 7) // 2 tests for 7 keys (no errors)
+  stringKeys.forEach(async function (key) {
+    try {
+      const newKey = await datResolve(key.key)
       t.equal(newKey, '6161616161616161616161616161616161616161616161616161616161616161', 'link correct')
       t.ok(enc.encode(newKey), 'valid key')
-    })
+    } catch (err) {
+      t.error(err, 'no error')
+    }
   })
 })
 
-test('resolve beaker browser without protocol', function (t) {
-  datResolve('beakerbrowser.com', function (err, key) {
-    t.error(err, 'no error')
-    t.ok(key, 'got key')
-    t.end()
-  })
+test('resolve beaker browser without protocol', async function (t) {
+  try {
+    const newKey = await datResolve('beakerbrowser.com')
+    t.ok(newKey, 'is a key')
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve beaker browser http', function (t) {
-  datResolve('http://beakerbrowser.com', function (err, key) {
-    t.error(err, 'no error')
-    t.ok(key, 'got key')
-    t.end()
-  })
+test('resolve beaker browser http', async function (t) {
+  try {
+    const newKey = await datResolve('http://beakerbrowser.com')
+    t.ok(newKey, 'is a key')
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve beaker browser https', function (t) {
-  datResolve('https://beakerbrowser.com', function (err, key) {
-    t.error(err, 'no error')
-    t.ok(key, 'got key')
-    t.end()
-  })
+test('resolve beaker browser https', async function (t) {
+  try {
+    const newKey = await datResolve('https://beakerbrowser.com')
+
+    t.ok(newKey, 'is a key')
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('resolve beaker browser dat', function (t) {
-  datResolve('dat://beakerbrowser.com', function (err, key) {
-    t.error(err, 'no error')
-    t.ok(key, 'got key')
-    t.end()
-  })
+test('resolve beaker browser dat', async function (t) {
+  try {
+    const newKey = await datResolve('dat://beakerbrowser.com')
+    t.ok(newKey, 'is a key')
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
 })
 
-test('callbacks are called out of a try/catch block', function (t) {
-  process.once('uncaughtException', function (err) {
-    t.equals(err.message, 'test', 'Making sure that the right error occurs')
-    t.end()
-  })
-  datResolve('dat://beakerbrowser.com', function () {
-    throw new Error('test')
+// this test is very slow
+test('resolve bad key without http', function (t) {
+  console.log('test may take awhile...')
+  t.plan(1 * stringBadKeys.length) // 1 tests for 2 keys
+  stringBadKeys.forEach(async function (key) {
+    try {
+      const newKey = await datResolve(key.key)
+      t.notOk(newKey, 'not a key')
+    } catch (err) {
+      t.ok(err, 'expected error')
+    }
   })
 })
