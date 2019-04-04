@@ -25,14 +25,13 @@ npm install dat-link-resolve
 ```js
 var datResolve = require('dat-link-resolve')
 
-datResolve(link, function (err, key) {
-  console.log('found key', key)
-})
+var key = await datResolve(link)
+console.log('dat key:', key)
 ```
 
 ## API
 
-### `datResolve(link, callback(err, key))`
+### `await datResolve(link)`
 
 Link can be string or buffer.
 
@@ -42,18 +41,6 @@ Resolution order:
 2. Check headers in http request
 3. Check JSON request response for `key`
 4. Dat-DNS resolution via [dat-dns](https://github.com/datprotocol/dat-dns)
-
-## Refering to dats
-Trying to tighten up a bit dat-link-resolve (and its dependencies dat-dns and dat-decode). I am noticing a few inconsistencies as I'm writing dat-shell.
-
-Ideally, I'd like to launch dat-shell like this:
-```sh
-$ dat-shell dat://40a7f6b6147ae695bcbcff432f684c7bb5291ea339c28c1755896cdeb80bd2f9+5/path4
-```
-
-and have it open the dat at version 5 and change directory to /path4.
-
-Currently ```dat-shell google-fonts-kewitz.hashbase.io/fonts/``` [fails somewhere in dat-link-resolve](https://github.com/millette/dat-shell/issues/5).
 
 ### Examples
 Note that dat-link-resolve also supports other methods, such as detection of dat keys in paths and http headers.
