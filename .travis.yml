@@ -1,8 +1,9 @@
 language: node_js
 node_js:
-  - '6'
   - '8'
   - '10'
+  - 'latest'
+  - 'lts/*'
 cache:
   directories:
     - node_modules

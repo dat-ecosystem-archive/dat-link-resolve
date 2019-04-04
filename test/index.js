@@ -48,6 +48,26 @@ test('resolve dat hostname with path', async function (t) {
   t.end()
 })
 
+test('resolve dat hostname with path and version', async function (t) {
+  try {
+    const newKey = await datResolve('dat://beakerbrowser.com/path+5')
+    t.ok(newKey, 'is a key')
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
+})
+
+test('resolve dat hostname with version', async function (t) {
+  try {
+    const newKey = await datResolve('dat://beakerbrowser.com+5')
+    t.ok(newKey, 'is a key')
+  } catch (err) {
+    t.err(err, 'not expected error')
+  }
+  t.end()
+})
+
 test('resolve hostname with path', async function (t) {
   try {
     const newKey = await datResolve('beakerbrowser.com/path')
